@@ -1,7 +1,7 @@
 
 let anTallrakkerSlider = document.getElementById("anTallrakkerSlider")
 /* let antallRekker = document.getElementById("sliderValue").value */
-let antall = 0
+let antall
 let høyde = 100
 let brett = document.getElementById("brett")
 let distanseFraTop = 0
@@ -9,23 +9,13 @@ let distanseFraLeft = 500
 let brikkeOppsett
 let antallRekker
 function lagBrett(){
-    brikkeOppsett = []
-    for (let i = 0; i<antallRekker;i++){
-        brikkeOppsett[i] = []
-        for(let j = 0; j < i+1; j++){
-            brikkeOppsett[i][j] = "g"
-            
-        }
-    }
-    brikkeOppsett[0][0]="r"
-    brikkeOppsett[antallRekker-1][parseInt(antallRekker/2)]="e"
-    
-    antall = 0
+
+    antall = 1
     høyde = 100
     distanseFraTop = 0
     distanseFraLeft = 500
     LeftØkning = 0
-    for(let i = 0; i < antallRekker+1; i++){
+    for(let i = 0; i < antallRekker; i++){
         for(let j = 0; j < antall; j++)
         {
             if(j>0){
@@ -50,13 +40,14 @@ function lagBrett(){
             sirkel.style.left = "50%";
             sirkel.style.transform = "translate(-50%, -50%)";
             sirkel.setAttribute("class","container");
-            sirkel.setAttribute("id","container "+ parseInt(i) +" " +parseInt(j+1));
+            sirkel.setAttribute("id","container "+ parseInt(i) +" " +parseInt(j));
+            console.log(i, j)
 
             const brikke = document.createElement("div");
             brikke.style.width = "30px";
             brikke.style.height = "30px";
             brikke.style.backgroundColor = "green";
-            if (i == 1 && j ==0){
+            if (i == 0 && j ==0){
                 brikke.style.backgroundColor = "red";
                 brikke.setAttribute("class", "rødBrikke")
             }
@@ -67,7 +58,7 @@ function lagBrett(){
             brikke.style.transform = "translate(-50%, -50%)";
             brikke.setAttribute("draggable", true);
             brikke.setAttribute("class","brikke");
-            brikke.setAttribute("id", "brikke " + parseInt(i) +" " +parseInt(j+1));
+            brikke.setAttribute("id", "brikke " + parseInt(i) +" " +parseInt(j));
             sirkel.appendChild(brikke);
             div.appendChild(sirkel);
             brett.appendChild(div);
@@ -75,18 +66,32 @@ function lagBrett(){
         }
         antall += 1
         distanseFraTop += høyde
-        distanseFraLeft -= 50 + høyde*(i-1)
+        distanseFraLeft -= 50 + høyde*(i)
 
         "Math.tan(30*(Math.PI/180))*høyde"
     }
-    document.getElementById(String("brikke " + Number(antallRekker)+" "+parseInt(antallRekker/2 + 1))).remove()
+    document.getElementById(String("brikke " + Number(antallRekker)+" "+parseInt(antallRekker/2))).remove()
+    document.getElementById("brikke " + "2 2").remove()
+    brikkeOppsett = []
+    for (let i = 0; i<antallRekker;i++){
+        brikkeOppsett[i] = []
+        for(let j = 0; j < i+1; j++){
+            brikkeOppsett[i][j] = "g"
+            
+        }
+    }
+    brikkeOppsett[0][0]="r"
+    brikkeOppsett[antallRekker-1][parseInt(antallRekker/2)]="e"
+    console.log(brikkeOppsett)
+    
 }
 antallRekker = parseInt(document.getElementById("sliderValue").value)
 lagBrett()
 
 anTallrakkerSlider.addEventListener("input", function() {
     document.querySelectorAll(".rute").forEach(div => div.remove());
-    lagBrett(parseInt(document.getElementById("sliderValue").value)); // Call your function
+    antallRekker = parseInt(document.getElementById("sliderValue").value)
+    lagBrett(); // Call your function
   });
 
 
@@ -113,16 +118,16 @@ function fargRuter(brikke){
     let a = parseInt(brikke.parentElement.id[10])
     let b = parseInt(brikke.parentElement.id[12])
 
-    for(let i = a-1; i < a+1;i++){
-        for(let j = b-1; j < b+1;j++){
-            
-            if([i, j, i+(1*(i-a)), j+(1*(j-b))].every(num => num > 0 && num <= antallRekker)){
+    for(let i = a-1; i < a + 1;i++){
+        for(let j = b-1; j < b + 1;j++){
+            if([i-1, j, i+(1*(i-a))-1, j+(1*(j-b))].every(num => num >= 0 && num <= antallRekker-1)){
                 //console.log([i, j, i+(1*(i-a)), j+(1*(j-b))])
                 //console.log([brikkeOppsett[i+(1*(i-a))-1][j+(1*(j-b))-1], brikkeOppsett[i-1][j-1]])
-                if (brikkeOppsett[i+(1*(i-a))-1][j+(1*(j-b))-1]=="e" && brikkeOppsett[i-1][j-1]=="g"){
+                console.log([i-1, j, i+(1*(i-a))-1, j+(1*(j-b))])
+                if (brikkeOppsett[i+(1*(i-a)-1)][j+(1*(j-b))]=="e" && brikkeOppsett[i-1][j]=="g"){
                     console.log(i, j)
                     fargedeRuter.push(document.getElementById("container "+ parseInt(i+(1*(i-a))) +" " +parseInt(j+(1*(j-b)))))
-                    console.log(fargedeRuter)
+                    console.log("brikkeOppsett")
                 }
             }
         }
