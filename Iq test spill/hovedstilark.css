@@ -1,0 +1,18 @@
+body{
+    height: auto;
+}
+#brett{
+    white-space: nowrap;
+    display: inline;
+    box-sizing: content-box;
+    position: absolute;
+    display: block;
+    width: 1000px;
+    height: 1000px;
+}
+.rute{
+    position: absolute;
+    background-size: contain;
+    display: inline-block;
+    outline: black 1px solid;
+}
