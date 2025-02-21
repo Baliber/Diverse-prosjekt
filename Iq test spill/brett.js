@@ -6,7 +6,19 @@ let høyde = 100
 let brett = document.getElementById("brett")
 let distanseFraTop = 0
 let distanseFraLeft = 500
+let brikkeOppsett
 function lagBrett(antallRekker){
+    brikkeOppsett = []
+    for (let i = 0; i<antallRekker;i++){
+        brikkeOppsett[i] = []
+        for(let j = 0; j < i+1; j++){
+            brikkeOppsett[i][j] = "g"
+            
+        }
+    }
+    brikkeOppsett[0][0]="r"
+    brikkeOppsett[antallRekker-1][parseInt(antallRekker/2)]="e"
+    console.log(brikkeOppsett)
     antall = 0
     høyde = 100
     distanseFraTop = 0
@@ -94,8 +106,28 @@ for (let i = 0; i < brikker.length; i++){
     brikker[i].addEventListener("dragend", dragEnd)
 }
 let tempBrikke
-let fargedeRuter
+let fargedeRuter = []
+
+
+function fargRuter(brikke){
+    let a = brikke.parentElement.id[10]
+    let b = brikke.parentElement.id[12]
+    //console.log(i,j)
+    for(let i = a-1; i < a+1;i++){
+        for(let j = b-1; j < b+1;j++){
+            if(i >0 && j >0){
+                if (brikkeOppsett[i+(1*a)][j+(1*b)]=="e" && brikkeOppsett[i][j]=="g"){
+                    fargRuter[i][j].append(containere[i][j])
+                }
+            }
+        }
+    }
+    for(rute of fargedeRuter){
+        rute.style.backgroundColor = "blue"
+    }
+}
 function dragStart() {
+    fargRuter(this)
     let e = this;
     tempBrikke = e
     brikkeType = tempBrikke.id
@@ -121,7 +153,6 @@ function dragStart() {
  
  
 function dragOver(e) {
-    e.preventDefault(); 
     //lar brikkene bli plassert inn i ruten dersom den er farget
     if (fargedeRuter.includes(this)) {
         //default oppførsel er å ikke tillate drop 
@@ -149,8 +180,8 @@ function dragDrop() {
     //setter brikken inn i divven
     this.append(tempBrikke);
 
-/*     //oppdaterer brikkeoppsett arrayen
+    //oppdaterer brikkeoppsett arrayen
     brikkeOppsett[i][j] = brikkeTekst
-    brikkeOppsett[a][b] = "e" */
-
+    brikkeOppsett[a][b] = "e"
+    console.log(brikkeOppsett)
 }
